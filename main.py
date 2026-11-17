@@ -59,6 +59,7 @@ def forecast(case):
     p1, history_ratios = ratios(case)
     all_logs = [logv(r['viewers']) for r in case.get('history_hourly', []) if r.get('viewers') is not None]
     # Estimate launch-specific pre-hour trend from the last six hours; constrain noisy slopes.
+    # Include up to seven recent levels to compute at most six hourly changes.
     recent = all_logs[-7:]
     slope = median([recent[i] - recent[i - 1] for i in range(1, len(recent))]) if len(recent) > 1 else 0.0
     slope = max(-0.10, min(0.10, slope))
